@@ -42,7 +42,7 @@ public class App {
 		List<String> readLinesFromFile = readLinesFromFile(fileName);
 		String content = "";
 		for (String line : readLinesFromFile) {
-			content = String.format("%s %s", content, line);
+			content = String.format("%s%s", content, line);
 		}
 		return content;
 	}
@@ -62,7 +62,8 @@ public class App {
 			tempFile = File.createTempFile("chiffre", ".txt");
 			ArrayList<String> lines = new ArrayList<String>();
 			lines.add(chiffreText);
-			Files.write(tempFile.toPath(), lines, (OpenOption[]) null);
+			OpenOption[] options = new OpenOption[0];
+			Files.write(tempFile.toPath(), lines, options);
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);

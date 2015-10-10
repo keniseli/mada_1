@@ -9,12 +9,10 @@ public class RsaUtils {
 	 * 
 	 * @return the outcome of the fast exponentiation: <i>x<sup>e</sup>mod d</i>
 	 */
-	public static String squareAndMultiply(BigInteger d, BigInteger e, char x) {
+	public static String squareAndMultiply(BigInteger d, BigInteger e, int x) {
 
 		BigInteger h = BigInteger.ONE;
-		Character characterAsNumber = Character.valueOf(x);
-		String characterNumberAsString = String.valueOf(characterAsNumber);
-		BigInteger k = new BigInteger(characterNumberAsString);
+		BigInteger k = new BigInteger(String.valueOf(x));
 		for (int i = e.bitLength() - 2; i >= 0; i--) {
 			boolean isSet = e.testBit(i);
 			if (isSet) {

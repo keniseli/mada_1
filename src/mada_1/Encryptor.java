@@ -24,7 +24,7 @@ public class Encryptor {
 		BigInteger n = tuple.getFirstElement();
 		BigInteger e = tuple.getSecondElement();
 		for (char character : plainText.toCharArray()) {
-			String encrypted = RsaUtils.squareAndMultiply(n, e, character);
+			String encrypted = RsaUtils.squareAndMultiply(n, e, (int) character);
 			if (encryptedTextBuilder.length() > 0) {
 				encryptedTextBuilder.append(",");
 			}
