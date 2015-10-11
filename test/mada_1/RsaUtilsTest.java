@@ -4,44 +4,49 @@ import java.math.BigInteger;
 import java.util.HashMap;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class RsaUtilsTest {
 
 	@Test
-	public void testSquareAndMultiply_9_1() {
+	public void testSquareAndMultiply_77_1() {
 		String result = RsaUtils.squareAndMultiply(new BigInteger("77"), new BigInteger("13"), 75);
-		Assert.assertEquals("64", result);
+		Assert.assertEquals("47", result);
 	}
 
 	@Test
-	public void testSquareAndMultiply_9_2() {
-		String result = RsaUtils.squareAndMultiply(new BigInteger("77"), new BigInteger("37"), 64);
+	public void testSquareAndMultiply_77_2() {
+		String result = RsaUtils.squareAndMultiply(new BigInteger("77"), new BigInteger("37"), 47);
 		Assert.assertEquals("75", result);
 	}
 
 	@Test
-	public void testSquareAndMultiply_9_1_209() {
-		String result = RsaUtils.squareAndMultiply(new BigInteger("209"), new BigInteger("77"), 50);
-		Assert.assertEquals("191", result);
+	public void testSquareAndMultiply_11_1() {
+		String result = RsaUtils.squareAndMultiply(new BigInteger("11"), new BigInteger("13"), 7);
+		Assert.assertEquals("2", result);
 	}
 
 	@Test
-	public void testSquareAndMultiply_9_2_209() {
-		String result = RsaUtils.squareAndMultiply(new BigInteger("209"), new BigInteger("173"), 191);
+	public void testSquareAndMultiply_1_209() {
+		String result = RsaUtils.squareAndMultiply(new BigInteger("209"), new BigInteger("77"), 50);
+		Assert.assertEquals("8", result);
+	}
+
+	@Test
+	public void testSquareAndMultiply_2_209() {
+		String result = RsaUtils.squareAndMultiply(new BigInteger("209"), new BigInteger("173"), 8);
 		Assert.assertEquals("50", result);
 	}
 
 	@Test
-	public void testSquareAndMultiply_9_1_143() {
+	public void testSquareAndMultiply_1_143() {
 		char character = 'a';
 		String result = RsaUtils.squareAndMultiply(new BigInteger("143"), new BigInteger("7"), character);
 		Assert.assertEquals("59", result);
 	}
 
 	@Test
-	public void testSquareAndMultiply_9_2_143() {
+	public void testSquareAndMultiply_2_143() {
 		String result = RsaUtils.squareAndMultiply(new BigInteger("143"), new BigInteger("103"), 59);
 		Assert.assertEquals("97", result);
 	}

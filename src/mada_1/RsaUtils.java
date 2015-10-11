@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import oracle.jrockit.jfr.events.Bits;
-
 public class RsaUtils {
 
 	/**
@@ -15,22 +13,25 @@ public class RsaUtils {
 	 * 
 	 * @return the outcome of the fast exponentiation: <i>x<sup>e</sup>mod d</i>
 	 */
-	public static String squareAndMultiply(BigInteger m, BigInteger e, int x) {
-		BigInteger h = BigInteger.ONE;
-		BigInteger k = new BigInteger(String.valueOf(x));
+	public static String squareAndMultiply(BigInteger modulus, BigInteger e, int x) {
+		BigInteger ergebnis = BigInteger.ONE;
+		BigInteger faktor = new BigInteger(String.valueOf(x));
+
 		String bits = bits(e);
 		int length = bits.length();
-		char[] bitsArray = invert(bits.toCharArray());
-		for (int i = length - 2; i >= 0; i--) {
+		char[] bitsArray = bits.toCharArray();
+
+		for (int i = length - 1; i >= 0; i--) {
+			if (i != length - 1) {
+				faktor = faktor.pow(2).mod(modulus);
+			}
 			boolean isSet = bitsArray[i] == '1';
 			if (isSet) {
-				h = h.multiply(k).mod(m);
+				ergebnis = ergebnis.multiply(faktor).mod(modulus);
 			}
-			k = k.multiply(k).mod(m);
 		}
-		h = h.multiply(k).mod(m);
 
-		return h.toString();
+		return ergebnis.toString();
 	}
 
 	private static String bits(BigInteger bigInteger) {
@@ -43,15 +44,6 @@ public class RsaUtils {
 			bigInteger = bigInteger.divide(two);
 		}
 		return binaryStringBuilder.toString();
-	}
-
-	private static char[] invert(char[] chars) {
-		for (int i = 0; i < chars.length / 2; i++) {
-			char temp = chars[i];
-			chars[i] = chars[chars.length - i - 1];
-			chars[chars.length - i - 1] = temp;
-		}
-		return chars;
 	}
 
 	public static BigInteger euklid(BigInteger n, BigInteger e) {
