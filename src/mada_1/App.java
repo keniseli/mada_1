@@ -22,8 +22,15 @@ public class App {
 		String plainText = readContentFromFile("/text.txt");
 		File tempFile = encrypt(tupleFromFile, plainText);
 
-		tempFile.getAbsolutePath();
+		// String chiffreFile = tempFile.getName();
+		
+		
 		// TODO decrypt chiffre.txt
+		File chiffreFile = new File("/chiffre.txt");
+		Tuple tupleFromPrivateKey = getTupleFromFile("/sk.txt");
+		String chiffreText = readContentFromFile(tempFile.getAbsolutePath());
+		boolean done = decrypt(Tuple.parseTuple("(209,173)"), chiffreText);
+		
 	}
 
 	private Tuple getTupleFromFile(String keyFileName) {
@@ -48,7 +55,10 @@ public class App {
 	}
 	
 	private List<String> readLinesFromFile(String fileName) {
-		File file = new File(getClass().getResource(fileName).getFile());
+		File file =  new File(fileName);
+		if (!file.exists()) {
+			file = new File(getClass().getResource(fileName).getFile());
+		}
 		List<String> lines = FileUtils.readFromFile(file);
 		return lines;
 	}
@@ -59,7 +69,8 @@ public class App {
 
 		File tempFile = null;
 		try {
-			tempFile = File.createTempFile("chiffre", ".txt");
+			//tempFile = File.createTempFile("chiffre", ".txt");
+			tempFile = new File("chiffre.txt");
 			ArrayList<String> lines = new ArrayList<String>();
 			lines.add(chiffreText);
 			OpenOption[] options = new OpenOption[0];
@@ -69,5 +80,13 @@ public class App {
 			throw new RuntimeException(e);
 		}
 		return tempFile;
+	}
+	
+	private boolean decrypt(Tuple tuplePrivateKey, String chiffreText) {
+		Decryptor decryptor = new Decryptor();
+		String plainText = decryptor.decrypt(tuplePrivateKey, chiffreText);
+		System.out.println(plainText);
+		
+		return true;
 	}
 }

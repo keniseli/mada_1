@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
+import oracle.jrockit.jfr.events.Bits;
+
 public class RsaUtils {
 
 	/**
@@ -13,20 +15,43 @@ public class RsaUtils {
 	 * 
 	 * @return the outcome of the fast exponentiation: <i>x<sup>e</sup>mod d</i>
 	 */
-	public static String squareAndMultiply(BigInteger d, BigInteger e, int x) {
-
+	public static String squareAndMultiply(BigInteger m, BigInteger e, int x) {
 		BigInteger h = BigInteger.ONE;
 		BigInteger k = new BigInteger(String.valueOf(x));
-		for (int i = e.bitLength() - 2; i >= 0; i--) {
-			boolean isSet = e.testBit(i);
+		String bits = bits(e);
+		int length = bits.length();
+		char[] bitsArray = invert(bits.toCharArray());
+		for (int i = length - 2; i >= 0; i--) {
+			boolean isSet = bitsArray[i] == '1';
 			if (isSet) {
-				h = h.multiply(k).mod(d);
+				h = h.multiply(k).mod(m);
 			}
-			k = k.multiply(k).mod(d);
+			k = k.multiply(k).mod(m);
 		}
-		h = h.multiply(k).mod(d);
+		h = h.multiply(k).mod(m);
 
 		return h.toString();
+	}
+
+	private static String bits(BigInteger bigInteger) {
+		StringBuilder binaryStringBuilder = new StringBuilder();
+		BigInteger two = new BigInteger("2");
+
+		while (!bigInteger.equals(BigInteger.ZERO)) {
+			char c = (char) bigInteger.mod(two).add(new BigInteger("48")).intValue();
+			binaryStringBuilder.insert(0, c);
+			bigInteger = bigInteger.divide(two);
+		}
+		return binaryStringBuilder.toString();
+	}
+
+	private static char[] invert(char[] chars) {
+		for (int i = 0; i < chars.length / 2; i++) {
+			char temp = chars[i];
+			chars[i] = chars[chars.length - i - 1];
+			chars[chars.length - i - 1] = temp;
+		}
+		return chars;
 	}
 
 	public static BigInteger euklid(BigInteger n, BigInteger e) {
