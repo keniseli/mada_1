@@ -4,81 +4,59 @@ import java.math.BigInteger;
 import java.util.Random;
 
 public class KeyGenerator {
-	private BigInteger n, e;
-	
-	public BigInteger createBigInteger() {
+	private BigInteger n;
+	private BigInteger e;
+
+	public KeyGenerator() {
+		n = createN();
+		e = defineE(n);
+	}
+
+	private BigInteger createN() {
 		// create a BigInteger object
-		BigInteger bigInt_1 = null;
-		BigInteger bigInt_2 = null;
-		
-		// create and assign value to bitLength	
+		BigInteger firstBigInteger = null;
+		BigInteger secondBigInteger = null;
+
+		// create and assign value to bitLength
 		int bitLength = 1024;
-		
+
 		// create a random object
 		Random randomNumber_1 = new Random();
 		Random randomNumber_2 = new Random();
-		
-		//create two Primzahlen
-		bigInt_1 = BigInteger.probablePrime(bitLength, randomNumber_1);
-		bigInt_2 = BigInteger.probablePrime(bitLength, randomNumber_2);			
-		
-		//create n
-		n = bigInt_1.multiply(bigInt_2);
-		
+
+		// create two Primzahlen
+		firstBigInteger = BigInteger.probablePrime(bitLength, randomNumber_1);
+		secondBigInteger = BigInteger.probablePrime(bitLength, randomNumber_2);
+
+		// create n
+		BigInteger n = firstBigInteger.multiply(secondBigInteger);
+
 		return n;
 	}
-	
-	public BigInteger getGGT(BigInteger n, BigInteger e) {
-		BigInteger rest = null;
-		
-		while (n.compareTo(BigInteger.ZERO) != 0) {
-			rest = e.mod(n);
-			e = n;
-			n = rest;		
+
+	private BigInteger defineE(BigInteger n) {
+		System.out.println(n);
+		BigInteger e = BigInteger.valueOf(1000);
+		BigInteger gcd = RsaUtils.getGCD(n, e);
+		while (gcd.compareTo(BigInteger.ONE) != 0) {
+			e.add(BigInteger.ONE);
 		}
 		return e;
 	}
-	
-	public BigInteger defineE() {
-		System.out.println(n);
-		e = BigInteger.valueOf(1000);
-		while (getGGT(n,e).compareTo(BigInteger.ONE) != 0) {			
-		}
-		return e;		
-	}
-	
-	public String euklid() {
-		//declarations
-		BigInteger a, b, x0, x1, y0, y1, q, r, n, e, x0_tmp, y0_tmp;
-		n = BigInteger.valueOf(144);
-		e = BigInteger.valueOf(19);
-		a = createBigInteger();
-		b = defineE();
-		x0 = BigInteger.valueOf(1);
-		y0 = BigInteger.valueOf(0);
-		x1 = BigInteger.valueOf(0);
-		y1 = BigInteger.valueOf(1);
-		String result = null;
-	
-		
-		//euklidischer Algorithmus
-		while ((b.compareTo(BigInteger.ZERO)) != 0){
-			q = a.divide(b);
-			r = a.mod(b);				
-			a = b;
-			b = r;			
-			x0_tmp = x1;
-			y0_tmp = y1;
-			x1 = x0.subtract(q.multiply(x1));
-			y1 = y0.subtract(q.multiply(y1));	
-			x0 = x0_tmp;
-			y0 = y0_tmp;
-			
-			result = String.format("(%s,%s)", x0.toString(), y0.toString());
-			System.out.println(result);
-		}	
-		return result;
+
+	public BigInteger getN() {
+		return n;
 	}
 
+	public void setN(BigInteger n) {
+		this.n = n;
+	}
 
+	public BigInteger getE() {
+		return e;
+	}
+
+	public void setE(BigInteger e) {
+		this.e = e;
+	}
 }

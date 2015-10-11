@@ -18,7 +18,7 @@ public class App {
 		// TODO generate tuples
 
 		// encrypt text.txt in chiffre.txt
-		Tuple tupleFromFile = getTupleFromFile("/sk.txt");
+		Tuple tupleFromFile = getTupleFromFile("/pk.txt");
 		String plainText = readContentFromFile("/text.txt");
 		File tempFile = encrypt(tupleFromFile, plainText);
 

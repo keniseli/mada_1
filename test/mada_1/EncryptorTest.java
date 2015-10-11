@@ -16,8 +16,15 @@ public class EncryptorTest {
 	}
 
 	@Test
-	public void testEncryption() {
+	public void testEncryption6() {
 		String encrypt = encryptor.encrypt(new Tuple(new BigInteger("77"), new BigInteger("13")), "6");
+		Assert.assertEquals("62", encrypt);
+	}
+	
+	@Test
+	public void testEncryptionSomeText() {
+		Tuple tuple = new Tuple(new BigInteger("77"), new BigInteger("13"));
+		String encrypt = encryptor.encrypt(tuple, "some");
 		Assert.assertEquals("62", encrypt);
 	}
 	
