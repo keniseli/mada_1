@@ -1,4 +1,4 @@
-package mada_1;
+package mada;
 
 import java.math.BigInteger;
 import java.util.Random;
@@ -35,7 +35,7 @@ public class KeyGenerator {
 	}
 
 	private BigInteger defineE(BigInteger n) {
-		System.out.println(n);
+//		System.out.println(n);
 		BigInteger e = BigInteger.valueOf(1000);
 		BigInteger gcd = RsaUtils.getGCD(n, e);
 		while (gcd.compareTo(BigInteger.ONE) != 0) {

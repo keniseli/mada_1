@@ -1,10 +1,12 @@
-package mada_1;
+package mada;
 
 import java.math.BigInteger;
 import java.util.HashMap;
 
 import org.junit.Assert;
 import org.junit.Test;
+
+import mada.RsaUtils;
 
 public class RsaUtilsTest {
 

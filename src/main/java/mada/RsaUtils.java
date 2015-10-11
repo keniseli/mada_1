@@ -1,4 +1,4 @@
-package mada_1;
+package mada;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
