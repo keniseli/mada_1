@@ -23,7 +23,7 @@ public class KeyGeneratorTest {
 	public void getGGT() {
 		BigInteger a = BigInteger.valueOf(6);
 		BigInteger b = BigInteger.valueOf(8);
-		BigInteger ggt = keygen.getGGT(a,b);
+		BigInteger ggt = RsaUtils.getGCD(a,b);
 		Assert.assertEquals(1, ggt);
 	}
 	
