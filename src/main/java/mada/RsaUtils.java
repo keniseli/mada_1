@@ -1,13 +1,7 @@
 package mada;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map.Entry;
-
-import org.junit.Assert;
-import org.junit.Test;
 
 public class RsaUtils {
 
@@ -35,38 +29,6 @@ public class RsaUtils {
 		}
 
 		return ergebnis.toString();
-	}
-
-	@Test
-	public void test() {
-		String bits = RsaUtils.bits(new BigInteger("2"));
-		Assert.assertEquals("10", bits);
-		 bits = RsaUtils.bits(new BigInteger("3"));
-		Assert.assertEquals("11", bits);
-		bits = RsaUtils.bits(new BigInteger("18"));
-		Assert.assertEquals("10010", bits);
-//		bits = RsaUtils.bits(new BigInteger("0"));
-//		Assert.assertEquals("0", bits);
-		bits = RsaUtils.bits(new BigInteger("31"));
-		Assert.assertEquals("11111", bits);
-
-	}
-
-	private static String bits(BigInteger integer) {
-		BigInteger bigInteger = new BigInteger(integer.toString());
-		StringBuilder binaryStringBuilder = new StringBuilder();
-		BigInteger two = new BigInteger("2");
-
-		while (!bigInteger.equals(BigInteger.ZERO)) {
-			BigInteger mod2 = bigInteger.mod(two);
-			String bit = "0";
-			if (mod2.equals(BigInteger.ONE)) {
-				bit = "1";
-			}
-			binaryStringBuilder.insert(0, bit);
-			bigInteger = bigInteger.divide(two);
-		}
-		return binaryStringBuilder.toString();
 	}
 
 	public static BigInteger euklid(BigInteger m, BigInteger e) {
@@ -108,27 +70,6 @@ public class RsaUtils {
 			n = rest;
 		}
 		return gcd;
-	}
-
-	public static BigInteger[] doTheSieve(BigInteger sizeOfSieve) {
-		List<BigInteger> primes = new ArrayList<>();
-		BigInteger i = new BigInteger("2");
-		while (i.compareTo(sizeOfSieve) < 1) {
-			if (isPrime(i, primes)) {
-				primes.add(i);
-			}
-			i = i.add(BigInteger.ONE);
-		}
-		return primes.toArray(new BigInteger[primes.size()]);
-	}
-
-	private static boolean isPrime(BigInteger possiblePrime, List<BigInteger> knownPrimes) {
-		for (BigInteger prime : knownPrimes) {
-			if (possiblePrime.mod(prime) == BigInteger.ZERO) {
-				return false;
-			}
-		}
-		return true;
 	}
 
 	public static HashMap<BigInteger, BigInteger> getPrimeFactors(BigInteger n, BigInteger[] primes,

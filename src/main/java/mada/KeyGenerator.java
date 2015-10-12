@@ -13,11 +13,11 @@ public class KeyGenerator {
 
 	public KeyGenerator() {
 		n = createN();
-		e = defineE(n);
-		d = defineD(n);
+		e = defineE();
+		d = defineD();
 	}
 
-	private BigInteger defineD(BigInteger n2) {
+	private BigInteger defineD() {
 		BigInteger m = getPhi();
 		BigInteger d = RsaUtils.euklid(m, e);
 		return d;
@@ -38,7 +38,7 @@ public class KeyGenerator {
 		return n;
 	}
 
-	private BigInteger defineE(BigInteger n) {
+	private BigInteger defineE() {
 		System.out.println(n);
 		BigInteger e = BigInteger.probablePrime(BIT_LENGTH, new Random());
 		BigInteger m = getPhi();
