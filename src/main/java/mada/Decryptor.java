@@ -12,7 +12,7 @@ public class Decryptor {
 		String[] chiffreElementsArray = chiffreText.split(",");
 		
 		for (String element : chiffreElementsArray) {
-			String decrypted = RsaUtils.squareAndMultiply(n, d, Integer.parseInt(element));
+			String decrypted = RsaUtils.squareAndMultiply(n, d, new BigInteger(element));
 			int value = Integer.parseInt(decrypted);
 			char character = (char) value;
 			decryptedStringBuilder.append(character);

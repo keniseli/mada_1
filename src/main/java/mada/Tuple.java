@@ -30,7 +30,7 @@ public class Tuple {
 	public void setSecondElement(BigInteger secondElement) {
 		this.secondElement = secondElement;
 	}
-	
+
 	public static Tuple parseTuple(String tupleString) {
 		String[] parts = prepareForParsing(tupleString);
 		ensureIntegrity(parts);
@@ -41,10 +41,14 @@ public class Tuple {
 		return tuple;
 	}
 
+	public String toString() {
+		return String.format("(%s,%s)", firstElement.toString(), secondElement.toString());
+	}
+
 	private static String[] prepareForParsing(String tupleString) {
 		tupleString = tupleString.replaceAll("\\(", "");
 		tupleString = tupleString.replaceAll("\\)", "");
-		
+
 		String[] parts = tupleString.split("\\,");
 		return parts;
 	}

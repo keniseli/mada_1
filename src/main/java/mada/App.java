@@ -1,6 +1,7 @@
 package mada;
 
 import java.io.File;
+import java.math.BigInteger;
 import java.util.List;
 
 public class App {
@@ -17,7 +18,16 @@ public class App {
 
 	private void doTheRsa() {
 		// TODO generate tuples
-		
+		KeyGenerator generator = new KeyGenerator();
+		BigInteger n = generator.getN();
+		BigInteger e = generator.getE();
+		Tuple generatedPublicKey = new Tuple(n, e);
+		File publicKeyFile = fileUtils.getFileFromClassPath(PUBLIC_KEY_FILE_NAME);
+		fileUtils.writeToFile(publicKeyFile, generatedPublicKey.toString());
+		File privateKeyFile = fileUtils.getFileFromClassPath(PRIVATE_KEY_FILE_NAME);
+		BigInteger d = generator.getD();
+		Tuple generatedPrivateKey = new Tuple(n, d);
+		fileUtils.writeToFile(privateKeyFile, generatedPrivateKey.toString());
 
 		// encrypt text.txt in chiffre.txt
 		Tuple publicKey = getTupleFromFile(PUBLIC_KEY_FILE_NAME);

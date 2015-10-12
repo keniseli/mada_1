@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 public class RsaUtils {
 
 	/**
@@ -13,11 +16,11 @@ public class RsaUtils {
 	 * 
 	 * @return the outcome of the fast exponentiation: <i>x<sup>e</sup>mod d</i>
 	 */
-	public static String squareAndMultiply(BigInteger modulus, BigInteger e, int x) {
+	public static String squareAndMultiply(BigInteger modulus, BigInteger e, BigInteger x) {
 		BigInteger ergebnis = BigInteger.ONE;
-		BigInteger faktor = new BigInteger(String.valueOf(x));
+		BigInteger faktor = new BigInteger(x.toString());
 
-		String bits = bits(e);
+		String bits = e.toString(2);
 		int length = bits.length();
 		char[] bitsArray = bits.toCharArray();
 
@@ -34,44 +37,63 @@ public class RsaUtils {
 		return ergebnis.toString();
 	}
 
-	private static String bits(BigInteger bigInteger) {
+	@Test
+	public void test() {
+		String bits = RsaUtils.bits(new BigInteger("2"));
+		Assert.assertEquals("10", bits);
+		 bits = RsaUtils.bits(new BigInteger("3"));
+		Assert.assertEquals("11", bits);
+		bits = RsaUtils.bits(new BigInteger("18"));
+		Assert.assertEquals("10010", bits);
+//		bits = RsaUtils.bits(new BigInteger("0"));
+//		Assert.assertEquals("0", bits);
+		bits = RsaUtils.bits(new BigInteger("31"));
+		Assert.assertEquals("11111", bits);
+
+	}
+
+	private static String bits(BigInteger integer) {
+		BigInteger bigInteger = new BigInteger(integer.toString());
 		StringBuilder binaryStringBuilder = new StringBuilder();
 		BigInteger two = new BigInteger("2");
 
 		while (!bigInteger.equals(BigInteger.ZERO)) {
-			char c = (char) bigInteger.mod(two).add(new BigInteger("48")).intValue();
-			binaryStringBuilder.insert(0, c);
+			BigInteger mod2 = bigInteger.mod(two);
+			String bit = "0";
+			if (mod2.equals(BigInteger.ONE)) {
+				bit = "1";
+			}
+			binaryStringBuilder.insert(0, bit);
 			bigInteger = bigInteger.divide(two);
 		}
 		return binaryStringBuilder.toString();
 	}
 
-	public static BigInteger euklid(BigInteger n, BigInteger e) {
-		// declarations
-		BigInteger x0, x1, y0, y1, q, r, x0_tmp, y0_tmp;
-		BigInteger a = new BigInteger(n.toString());
+	public static BigInteger euklid(BigInteger m, BigInteger e) {
+		BigInteger x0, x1, y0, y1, q = null, r = null, x0_tmp, y0_tmp;
+		BigInteger a = new BigInteger(m.toString());
 		BigInteger b = new BigInteger(e.toString());
 		x0 = BigInteger.valueOf(1);
 		y0 = BigInteger.valueOf(0);
 		x1 = BigInteger.valueOf(0);
 		y1 = BigInteger.valueOf(1);
-		String result = null;
 
-		// euklidischer Algorithmus
 		while ((b.compareTo(BigInteger.ZERO)) != 0) {
 			q = a.divide(b);
 			r = a.mod(b);
-			a = b;
-			b = r;
-			x0_tmp = x1;
-			y0_tmp = y1;
-			x1 = x0.subtract(q.multiply(x1));
-			y1 = y0.subtract(q.multiply(y1));
-			x0 = x0_tmp;
-			y0 = y0_tmp;
-
-			result = String.format("(%s,%s)", x0.toString(), y0.toString());
-			System.out.println(result);
+			System.out.println(String.format("%s  %s  %s  %s  %s  %s  %s  %s", a, b, x0, y0, x1, y1, q, r));
+			a = new BigInteger(b.toString());
+			b = new BigInteger(r.toString());
+			x0_tmp = new BigInteger(x0.toString());
+			y0_tmp = new BigInteger(y0.toString());
+			x0 = new BigInteger(x1.toString());
+			y0 = new BigInteger(y1.toString());
+			x1 = x0_tmp.subtract(q.multiply(x1));
+			y1 = y0_tmp.subtract(q.multiply(y1));
+		}
+		System.out.println(String.format("%s  %s  %s  %s  %s  %s  %s  %s", a, b, x0, y0, x1, y1, q, r));
+		if (y0.signum() == -1) {
+			y0 = y0.add(m);
 		}
 		return y0;
 	}
@@ -86,27 +108,6 @@ public class RsaUtils {
 			n = rest;
 		}
 		return gcd;
-	}
-
-	/**
-	 * Calculates phi of the given n.<br />
-	 * phi(n) = (prime1 - 1) * prime1<sup>e1-1</sup> + (prime 2 - 1) * prime2
-	 * <sup>e2-1</sup> ... (primeN - 1) * primeN<sup>eN-1</sup>
-	 * 
-	 */
-	public static BigInteger getPhi(BigInteger n) {
-		BigInteger result = BigInteger.ONE;
-
-		BigInteger[] primes = doTheSieve(n.subtract(BigInteger.ONE));
-
-		HashMap<BigInteger, BigInteger> primeFactors = new HashMap<>();
-		primeFactors = getPrimeFactors(n, primes, primeFactors);
-		for (Entry<BigInteger, BigInteger> entry : primeFactors.entrySet()) {
-			BigInteger base = entry.getKey();
-			BigInteger exponent = entry.getValue();
-			result = result.multiply((base.subtract(BigInteger.ONE)).multiply(base.pow(exponent.intValue() - 1)));
-		}
-		return result;
 	}
 
 	public static BigInteger[] doTheSieve(BigInteger sizeOfSieve) {
